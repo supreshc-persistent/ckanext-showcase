@@ -7,7 +7,7 @@
 
 {% block styles %}
   {{ super() }}
-  <link rel="stylesheet" href="/ckanext_showcase.css" />
+  <link rel="stylesheet" href="{{ g.site_url }}/ckanext_showcase.css" />
 {% endblock %}
 
 {% block links -%}
@@ -93,7 +93,7 @@
   {% block secondary_help_content %}{% endblock %}
 
   {% block package_info %}
-    {% snippet 'showcase/snippets/showcase_info.html', pkg=pkg %}
+    {% snippet 'showcase/snippets/showcase_info.html', pkg=pkg, showcase_pkgs=c.showcase_pkgs %}
   {% endblock %}
 
   {% block package_social %}
