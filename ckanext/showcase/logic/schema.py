@@ -106,9 +106,8 @@ def showcase_show_schema():
     schema.update({
         'image_url': [toolkit.get_converter('convert_from_extras'),
                       toolkit.get_validator('ignore_missing')],
-        'original_related_item_id': [
-            toolkit.get_validator('ignore_missing'),
-            toolkit.get_converter('convert_from_extras')],
+        'original_related_item_id': [toolkit.get_converter('convert_from_extras'),
+                                     toolkit.get_validator('ignore_missing')],
     })
 
     return schema
