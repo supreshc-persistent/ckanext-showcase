@@ -15,7 +15,7 @@ show_remove    - If True, show the remove button to remove showcase/dataset asso
 
 {% block showcase_item %}
 
-<div class="media-item" style="border-radius:6px; padding:15px 10px 15px; height:180px;">
+<div class="media-item" style="border-radius:6px; padding:15px 10px 15px; margin:15px 5px 0 10px; height:180px;">
   {% block item_inner %}
     {% block image %}
       {% if showcase.extras[0].value and 'http' not in showcase.extras[0].value %}
