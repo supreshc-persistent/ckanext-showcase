@@ -89,6 +89,9 @@
 .slick-slide img
 {
     display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 165px;
 }
 .slick-slide.slick-loading img
 {
@@ -116,4 +119,23 @@
 }
 .slick-arrow.slick-hidden {
     display: none;
+}
+
+.slick-showcase .media-item {
+  padding: 5px;
+  margin: 10px 5px 0px 10px;
+  height: 245px;
+  width: 334px;
+}
+@media only screen and (min-width: 640px) {
+  .slick-showcase .media-item {
+    height: 240px;
+    width: 334px;
+  }
+}
+@media only screen and (min-width: 1280px) {
+  .slick-showcase .media-item {
+    height: 250px;
+    width: 334px;
+  }
 }
