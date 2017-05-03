@@ -139,3 +139,7 @@
     width: 334px;
   }
 }
+.slick-showcase .media-item h3 {
+  text-align: center;
+  line-height: 1.2em;
+}
