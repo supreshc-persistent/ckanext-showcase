@@ -18,6 +18,12 @@ show_remove    - If True, show the remove button to remove showcase/dataset asso
 <div class="media-item">
   {% block item_inner %}
     {% block image %}
+      {% if showcase.private %}
+      <span class="dataset-private label label-inverse pull-right" style="position:absolute;">
+        <i class="icon-lock __web-inspector-hide-shortcut__"></i>
+        Private
+      </span>
+      {% endif %}
       {% if showcase.extras[0].value and 'http' not in showcase.extras[0].value %}
       <img data-lazy="/uploads/showcase/{{ showcase.extras[0].value }}" alt="" class="media-image">
       {% else %}
