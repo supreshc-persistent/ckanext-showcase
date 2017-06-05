@@ -151,8 +151,7 @@ class ShowcaseController(PackageController):
         try:
             check_access('ckanext_showcase_show', context, data_dict)
         except NotAuthorized:
-            abort(401, _('User not authorized to read {showcase_id}').format(
-                showcase_id=id))
+            abort(401, _('User not authorized to read {showcase_id}').format(showcase_id=id))
 
         # get showcase packages
         c.showcase_pkgs = get_action('ckanext_showcase_package_list')(
@@ -601,3 +600,14 @@ class ShowcaseController(PackageController):
         c.user_dict = get_action('user_show')(data_dict={'id': user_id})
         c.user_id = user_id
         return render('admin/confirm_remove_showcase_admin.html')
+
+    def _setup_template_variables(self, context, data_dict, package_type=None):
+        try:
+            if package_type == DATASET_TYPE_NAME and c.page.items:
+                showcase_list = get_action('ckanext_showcase_list')(context, {})
+                for showcase in showcase_list:
+                    if showcase.get('private'):
+                        c.page.items.append(showcase)
+        except:
+            pass
+        return super(ShowcaseController, self)._setup_template_variables(context, data_dict, package_type=None)
