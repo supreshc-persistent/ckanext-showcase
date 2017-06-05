@@ -24,11 +24,7 @@ show_remove    - If True, show the remove button to remove showcase/dataset asso
         Private
       </span>
       {% endif %}
-      {% if showcase.extras[0].value and 'http' not in showcase.extras[0].value %}
-      <img data-lazy="/uploads/showcase/{{ showcase.extras[0].value }}" alt="" class="media-image">
-      {% else %}
-      <img data-lazy="{{ showcase.extras[0].value or h.url_for_static('/base/images/placeholder-group.png') }}" alt="" class="media-image">
-      {% endif %}
+      <img data-lazy="{{ showcase.image_display_url or h.url_for_static('/base/images/placeholder-group.png') }}" alt="" class="media-image">
     {% endblock %}
     {% block title %}
       <h3>{{ showcase.title }}</h3>

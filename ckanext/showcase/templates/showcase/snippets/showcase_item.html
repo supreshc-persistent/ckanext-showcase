@@ -18,6 +18,12 @@ show_remove    - If True, show the remove button to remove showcase/dataset asso
 <li class="media-item">
   {% block item_inner %}
     {% block image %}
+      {% if package.private %}
+        <span class="dataset-private label label-inverse pull-right" style="position:absolute;">
+          <i class="icon-lock __web-inspector-hide-shortcut__"></i>
+          Private
+        </span>
+      {% endif %}
       <img src="{{ package.image_display_url or h.url_for_static('/base/images/placeholder-group.png') }}" alt="{{ package.name }}" class="media-image">
     {% endblock %}
     {% block title %}

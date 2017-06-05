@@ -1,6 +1,7 @@
 import sqlalchemy
 
 import ckan.plugins.toolkit as toolkit
+import ckan.lib.helpers as h
 import ckan.lib.dictization.model_dictize as model_dictize
 from ckan.lib.navl.dictization_functions import validate
 from ckan.logic import NotAuthorized
@@ -46,16 +47,22 @@ def showcase_list(context, data_dict):
     showcase_list = []
 
     for pkg in q.all():
-        try:
-            pkg_dict = model_dictize.package_dictize(pkg, context)
-            if pkg_dict['private']:
+        pkg_dict = model_dictize.package_dictize(pkg, context)
+
+        image_url = next((item.get('value') for item in pkg_dict.get('extras') if item.get('key') == 'image_url'), None)
+        if image_url and not image_url.startswith('http'):
+            pkg_dict['image_display_url'] = h.url_for_static('uploads/showcase/{0}'.format(image_url), qualified=True)
+
+        if pkg_dict['private']:
+            try:
                 user = context.get('user', '')
                 userobj = model.User.get(user)
                 if not ShowcaseAdmin.is_user_showcase_admin(userobj):
-                    pass
+                    showcase_list.append(pkg_dict)
+            except:
+                pass
+        else:
             showcase_list.append(pkg_dict)
-        except:
-            pass
     return showcase_list
 
 
