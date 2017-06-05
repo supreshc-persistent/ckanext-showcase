@@ -11,7 +11,8 @@ from ckan.logic.validators import (package_id_not_changed,
                                    package_name_validator,
                                    tag_string_convert,
                                    ignore_not_package_admin,
-                                   no_http)
+                                   no_http,
+                                   boolean_validator)
 from ckan.logic.schema import (default_tags_schema,
                                default_extras_schema,
                                default_resource_schema)
@@ -31,6 +32,7 @@ def showcase_base_schema():
         'author_email': [ignore_missing, unicode],
         'notes': [ignore_missing, unicode],
         'url': [ignore_missing, unicode],
+        'private': [ignore_missing, boolean_validator],
         'state': [ignore_not_package_admin, ignore_missing],
         'type': [ignore_missing, unicode],
         'log_message': [ignore_missing, unicode, no_http],
@@ -93,6 +95,7 @@ def showcase_show_schema():
     schema['author_email'] = []
     schema['notes'] = []
     schema['url'] = []
+    schema['private'] = []
 
     # Add several keys that are missing from default_create_package_schema(),
     # so validation doesn't strip the keys from the package dicts.

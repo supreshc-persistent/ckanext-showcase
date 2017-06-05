@@ -44,9 +44,18 @@ def showcase_list(context, data_dict):
         .filter(model.Package.state == 'active')
 
     showcase_list = []
-    for pkg in q.all():
-        showcase_list.append(model_dictize.package_dictize(pkg, context))
 
+    for pkg in q.all():
+        try:
+            pkg_dict = model_dictize.package_dictize(pkg, context)
+            if pkg_dict['private']:
+                user = context.get('user', '')
+                userobj = model.User.get(user)
+                if not ShowcaseAdmin.is_user_showcase_admin(userobj):
+                    pass
+            showcase_list.append(pkg_dict)
+        except:
+            pass
     return showcase_list
 
 
