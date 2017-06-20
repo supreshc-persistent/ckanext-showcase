@@ -57,7 +57,7 @@ def showcase_list(context, data_dict):
             try:
                 user = context.get('user', '')
                 userobj = model.User.get(user)
-                if not ShowcaseAdmin.is_user_showcase_admin(userobj):
+                if ShowcaseAdmin.is_user_showcase_admin(userobj):
                     showcase_list.append(pkg_dict)
             except:
                 pass

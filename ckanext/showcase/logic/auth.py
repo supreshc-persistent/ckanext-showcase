@@ -41,7 +41,6 @@ def update(context, data_dict):
     return {'success': _is_showcase_admin(context)}
 
 
-@toolkit.auth_allow_anonymous_access
 def show(context, data_dict):
     '''All users can access a showcase show unless private'''
     package = get_package_object(context, data_dict)
