@@ -98,7 +98,8 @@ class ShowcasePlugin(plugins.SingletonPlugin, lib_plugins.DefaultDatasetForm):
         return {
             'facet_remove_field': showcase_helpers.facet_remove_field,
             'get_site_statistics': showcase_helpers.get_site_statistics,
-            'get_recent_showcase_list': showcase_helpers.get_recent_showcase_list
+            'get_recent_showcase_list': showcase_helpers.get_recent_showcase_list,
+            'get_package_showcase_list': showcase_helpers.get_package_showcase_list
         }
 
     # IFacets
