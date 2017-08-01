@@ -1,6 +1,6 @@
 import ckan.plugins.toolkit as toolkit
 import ckan.model as model
-from ckan.logic.auth import get_package_object
+from ckan.logic.auth import _get_object
 
 from ckanext.showcase.model import ShowcaseAdmin
 
@@ -43,10 +43,13 @@ def update(context, data_dict):
 
 def show(context, data_dict):
     '''All users can access a showcase show unless private'''
-    package = get_package_object(context, data_dict)
-    if not package.private:
-        return {'success': True}
-    return {'success': _is_showcase_admin(context)}
+    package = _get_object(context, data_dict,'showcase','Package')
+    try:
+        if not package.private:
+            return {'success': True}
+        return {'success': _is_showcase_admin(context)}
+    except:
+        return {'success': False}
 
 
 @toolkit.auth_allow_anonymous_access

@@ -144,14 +144,16 @@ class ShowcaseController(PackageController):
             c.pkg_dict = get_action('package_show')(context, data_dict)
         except NotFound:
             abort(404, _('Showcase not found'))
-        except NotAuthorized:
-            abort(401, _('Unauthorized to read showcase'))
+        #except NotAuthorized:
+        #    abort(401, _('Unauthorized to read showcase'))
 
         # check if user can view
-        try:
-            check_access('ckanext_showcase_show', context, data_dict)
-        except NotAuthorized:
-            abort(401, _('User not authorized to read {showcase_id}').format(showcase_id=id))
+        if c.pkg_dict['private']:
+            try:
+                log.debug(c.pkg_dict)
+                check_access('ckanext_showcase_show', context, data_dict)
+            except NotAuthorized:
+                abort(401, _('User not authorized to read {showcase_id}').format(showcase_id=id))
 
         # get showcase packages
         c.showcase_pkgs = get_action('ckanext_showcase_package_list')(
