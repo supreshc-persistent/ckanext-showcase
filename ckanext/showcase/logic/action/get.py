@@ -3,6 +3,7 @@ import sqlalchemy
 import ckan.plugins.toolkit as toolkit
 import ckan.lib.helpers as h
 import ckan.lib.dictization.model_dictize as model_dictize
+import ckan.authz as authz
 from ckan.lib.navl.dictization_functions import validate
 from ckan.logic import NotAuthorized
 
@@ -57,7 +58,7 @@ def showcase_list(context, data_dict):
             try:
                 user = context.get('user', '')
                 userobj = model.User.get(user)
-                if ShowcaseAdmin.is_user_showcase_admin(userobj):
+                if ShowcaseAdmin.is_user_showcase_admin(userobj) or authz.is_sysadmin(user):
                     showcase_list.append(pkg_dict)
             except:
                 pass

@@ -150,7 +150,6 @@ class ShowcaseController(PackageController):
         # check if user can view
         if c.pkg_dict['private']:
             try:
-                log.debug(c.pkg_dict)
                 check_access('ckanext_showcase_show', context, data_dict)
             except NotAuthorized:
                 abort(401, _('User not authorized to read {showcase_id}').format(showcase_id=id))

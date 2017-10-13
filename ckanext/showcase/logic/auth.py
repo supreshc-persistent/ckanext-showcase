@@ -1,5 +1,6 @@
 import ckan.plugins.toolkit as toolkit
 import ckan.model as model
+import ckan.authz as authz
 from ckan.logic.auth import _get_object
 
 from ckanext.showcase.model import ShowcaseAdmin
@@ -14,6 +15,8 @@ def _is_showcase_admin(context):
     '''
     user = context.get('user', '')
     userobj = model.User.get(user)
+    if authz.is_sysadmin(user):
+        return {'success': True}
     return ShowcaseAdmin.is_user_showcase_admin(userobj)
 
 
