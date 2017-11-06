@@ -47,12 +47,6 @@
     </div>
   {% endif %}
   {% block package_description %}
-    {% if pkg.private %}
-      <span class="dataset-private label label-inverse pull-right">
-        <i class="icon-lock"></i>
-        {{ _('Private') }}
-      </span>
-    {% endif %}
     <h1>
       {% block page_heading %}
         {{ name }}
@@ -61,6 +55,12 @@
         {% endif %}
       {% endblock %}
     </h1>
+    {% if pkg.private %}
+      <span class="dataset-private label label-inverse pull-right">
+        <i class="icon-lock"></i>
+        {{ _('Private') }}
+      </span>
+    {% endif %}
 
     {% if pkg.image_display_url %}
       <p class="ckanext-showcase-image-container">
