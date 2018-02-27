@@ -29,3 +29,21 @@ def get_site_statistics():
         tk.get_action('organization_list')({}, {}))
 
     return stats
+
+
+def get_recent_showcase_list(num=24):
+    """Return a list of recent showcases."""
+    showcases = []
+    showcases = tk.get_action('ckanext_showcase_list')({},{})
+    sorted_showcases = sorted(showcases, key=lambda k: k['metadata_modified'], reverse=True)
+
+    return sorted_showcases[:num]
+
+
+def get_package_showcase_list(package_id):
+    showcases = []
+    try:
+        showcases = tk.get_action('ckanext_package_showcase_list')({},{'package_id':package_id})
+    except:
+        return []
+    return showcases
