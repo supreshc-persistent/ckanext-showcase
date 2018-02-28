@@ -81,6 +81,10 @@ def package_showcase_list(context, data_dict):
     '''All users can access a packages's showcase list'''
     return {'success': True}
 
+@toolkit.auth_allow_anonymous_access
+def organization_showcase_list(context, data_dict):
+    '''All users can access a organization's showcase list'''
+    return {'success': True}
 
 def add_showcase_admin(context, data_dict):
     '''Only sysadmins can add users to showcase admin list.'''

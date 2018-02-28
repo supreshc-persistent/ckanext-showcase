@@ -127,6 +127,8 @@ class ShowcasePlugin(plugins.SingletonPlugin, lib_plugins.DefaultDatasetForm):
                 ckanext.showcase.logic.auth.showcase_package_list,
             'ckanext_package_showcase_list':
                 ckanext.showcase.logic.auth.package_showcase_list,
+            'ckanext_organization_showcase_list':
+                ckanext.showcase.logic.auth.organization_showcase_list,
             'ckanext_showcase_admin_add':
                 ckanext.showcase.logic.auth.add_showcase_admin,
             'ckanext_showcase_admin_remove':
@@ -187,6 +189,8 @@ class ShowcasePlugin(plugins.SingletonPlugin, lib_plugins.DefaultDatasetForm):
                 ckanext.showcase.logic.action.get.showcase_package_list,
             'ckanext_package_showcase_list':
                 ckanext.showcase.logic.action.get.package_showcase_list,
+            'ckanext_organization_showcase_list':
+                ckanext.showcase.logic.action.get.organization_showcase_list,
             'ckanext_showcase_admin_add':
                 ckanext.showcase.logic.action.create.showcase_admin_add,
             'ckanext_showcase_admin_remove':
