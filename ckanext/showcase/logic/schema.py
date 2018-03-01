@@ -121,7 +121,7 @@ def showcase_package_association_create_schema():
                        convert_package_name_or_id_to_id_for_type_dataset],
         'showcase_id': [not_empty, unicode,
                         convert_package_name_or_id_to_id_for_type_showcase],
-        'organization_id': [unicode,
+        'organization_id': [ignore_missing, unicode,
                         convert_organization_name_or_id_to_id]
     }
     return schema
