@@ -108,7 +108,7 @@ class ShowcasePackageAssociation(ShowcaseBaseModel):
         '''
         showcase_organization_association_list = \
             Session.query(cls.showcase_id).filter_by(
-                organization_id=organization_id).all()
+                organization_id=organization_id).distinct()
         return showcase_organization_association_list
 
 
