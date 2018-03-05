@@ -28,9 +28,13 @@ show_remove    - If True, show the remove button to remove showcase/dataset asso
       <h3>{{ showcase.title }}</h3>
     {% endblock %}
     {% block link %}
-      <a href="{{ h.url_for(controller='ckanext.showcase.controller:ShowcaseController', action='read', id=showcase.name) }}" title="{{ _('View {name}').format(name=showcase.title) }}" class="media-view">
-        <span>{{ _('View {name}').format(name=showcase.title) }}</span>
-      </a>
+      {% if showcase.url %}
+        <a href="{{ showcase.url }}" class="media-view" target="_blank"  title="{{ _('View {name}').format(name=showcase.title) }}" >
+      {% else %}
+        <a href="{{ h.url_for(controller='ckanext.showcase.controller:ShowcaseController', action='read', id=showcase.name) }}" title="{{ _('View {name}').format(name=showcase.title) }}" class="media-view">
+      {% endif %}
+          <span>{{ _('View {name}').format(name=showcase.title) }}</span>
+        </a>
     {% endblock %}
   {% endblock %}
 </div>
