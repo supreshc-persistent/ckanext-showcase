@@ -1,4 +1,19 @@
 /*
+Please note:
+This lib is modified for web accessibility
+Each media item used to have an "aria-describedby" attribute
+However, there were no corresponding descriptions, which violates web accessibility
+To fix the issue, the "aria-describedby" attribute is modified to "aria-labelledby"
+And each h3 label is assigned an corresponding id
+For future maintaince, please note that:
+If the DOM structure is changed, the following code should be changed accordingly
+
+$(this).find("h3").arrt({
+    'id': 'slick-slide' + _.instanceUid + i + ''
+})
+
+*/
+/*
      _ _      _       _
  ___| (_) ___| | __  (_)___
 / __| | |/ __| |/ /  | / __|
@@ -2529,9 +2544,7 @@
                 .eq(Math.floor(_.currentSlide / _.options.slidesToScroll))
                 .addClass('slick-active')
                 .attr('aria-hidden', 'false');
-
         }
-
     };
 
     Slick.prototype.visibility = function() {
@@ -2547,7 +2560,6 @@
                 _.autoPlay();
             }
         }
-
     };
     Slick.prototype.initADA = function() {
         var _ = this;
@@ -2563,8 +2575,11 @@
         _.$slides.not(_.$slideTrack.find('.slick-cloned')).each(function(i) {
             $(this).attr({
                 'role': 'option',
-                'aria-describedby': 'slick-slide' + _.instanceUid + i + ''
+                'aria-labelledby': 'slick-slide' + _.instanceUid + i + ''
             });
+            $(this).find("h3").first().attr({
+                'id': 'slick-slide' + _.instanceUid + i + ''
+            })
         });
 
         if (_.$dots !== null) {
