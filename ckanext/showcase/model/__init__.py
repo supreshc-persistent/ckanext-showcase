@@ -34,6 +34,14 @@ def setup():
             log.debug('ShowcasePackageAssociation table create')
         else:
             log.debug('ShowcasePackageAssociation table already exists')
+            # Check if existing tables need to be updated
+            from ckan.model.meta import engine
+            inspector = Inspector.from_engine(engine)
+            columns = inspector.get_columns('showcase_package_association')
+            column_names = [column['name'] for column in columns]
+            if not 'organization_id' in column_names:
+                log.debug('ShowcasePackageAssociation table needs to be updated')
+                migrate_v2()
 
         if not showcase_position_table.exists():
             showcase_position_table.create()
