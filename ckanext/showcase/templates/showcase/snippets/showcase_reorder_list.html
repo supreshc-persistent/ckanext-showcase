@@ -1,0 +1,15 @@
+<form method="POST">
+  <ul class="portal-nav-menu-admin">
+    {% for showcase in showcases %}
+      <li class="portal-nav-menu-admin__item">
+        <input type="hidden" name="menu_item_name_{{ showcase.id }}" value="{{ showcase.position }}" />
+        <h3>{{ showcase.title }}</h3>
+        <span class="grippy"></span>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <div class="form-actions">
+    <button class="btn btn-primary" name="save" type="submit">Save</button>
+  </div>
+</form>

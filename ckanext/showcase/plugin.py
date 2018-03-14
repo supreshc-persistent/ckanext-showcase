@@ -147,6 +147,7 @@ class ShowcasePlugin(plugins.SingletonPlugin, lib_plugins.DefaultDatasetForm):
             m.connect('ckanext_showcase_index', '/showcase', action='search',
                       highlight_actions='index search')
             m.connect('ckanext_showcase_new', '/showcase/new', action='new')
+            m.connect('ckanext_showcase_reorder', '/showcase/reorder', action='reorder')
             m.connect('ckanext_showcase_delete', '/showcase/delete/{id}',
                       action='delete')
             m.connect('ckanext_showcase_read', '/showcase/{id}', action='read',

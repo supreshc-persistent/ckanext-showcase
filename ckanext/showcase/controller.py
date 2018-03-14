@@ -14,7 +14,8 @@ from ckan.controllers.package import (PackageController,
                                       url_with_params,
                                       _encode_params)
 
-from ckanext.showcase.model import ShowcasePackageAssociation
+import ckanext.showcase.logic.helpers as showcasehelpers
+from ckanext.showcase.model import ShowcasePackageAssociation,ShowcasePosition
 from ckanext.showcase.plugin import DATASET_TYPE_NAME
 
 _ = tk._
@@ -602,3 +603,55 @@ class ShowcaseController(PackageController):
         c.user_dict = get_action('user_show')(data_dict={'id': user_id})
         c.user_id = user_id
         return render('admin/confirm_remove_showcase_admin.html')
+
+    def reorder(self, data=None, errors=None, error_summary=None):
+
+        context = {'model': model, 'session': model.Session,
+                   'user': c.user or c.author, 'auth_user_obj': c.userobj}
+
+        # Check access here
+        # This is okay for now, while only sysadmins can create Showcases, but
+        # may not work if we allow other users to create Showcases, who don't
+        # have access to create dataset package types. Same for edit below.
+        try:
+            check_access('ckanext_showcase_create', context)
+        except NotAuthorized:
+            abort(401, _('Unauthorized to reorder packages'))
+
+        if p.toolkit.request.method == 'POST':
+            data = dict(p.toolkit.request.POST)
+            for k, v in data.items():
+                if k.startswith('menu_item_name'):
+                    showcase_id = k.split('_')[-1]
+                    if ShowcasePosition.exists(showcase_id=showcase_id):
+                        position_obj = ShowcasePosition.get(showcase_id=showcase_id)
+                        position_obj.position = int(v)
+                        position_obj.commit()
+                    else:
+                        ShowcasePosition.create(showcase_id=showcase_id,position=int(v))
+
+        showcase_positions = ShowcasePosition.get_showcase_postions()
+        showcases = showcasehelpers.get_recent_showcase_list()
+        sorted_showcases = []
+        position = 0
+        if len(showcase_positions) > 0 :
+            for showcase_id in showcase_positions:
+                showcase =  next((item for item in showcases if item['id']==showcase_id),False)
+                if showcase:
+                    showcase['position'] = position
+                    position = position+1
+                    sorted_showcases.append(showcase)
+            ordered_showcase_ids = set(d["id"] for d in sorted_showcases)
+            unordered_showcases = [d for d in showcases if d['id'] not in ordered_showcase_ids]
+            for showcase in unordered_showcases:
+                showcase['position'] = position
+                position = position+1
+                sorted_showcases.append(showcase)
+        else :
+            for showcase in showcases:
+                showcase['position'] = position
+                position = position+1
+                sorted_showcases.append(showcase)
+
+        c.showcases = sorted_showcases
+        return render('showcase/reorder.html')
