@@ -128,7 +128,7 @@ def define_showcase_package_association_table():
                           onupdate='CASCADE'),
                primary_key=True, nullable=False),
         Column('organization_id', types.UnicodeText,
-               ForeignKey('package.id',
+               ForeignKey('group.id',
                           ondelete='CASCADE',
                           onupdate='CASCADE'),
                primary_key=True, nullable=True)
@@ -169,14 +169,17 @@ def define_showcase_admin_table():
 
 
 def migrate_v2():
-    log.debug('Migrating ShowcasePackageAssociation table to v2. This may take a while...')
+    log.debug('Migrating ShowcasePackageAssociation table to v2.')
     conn = Session.connection()
 
     statements =  """
     ALTER TABLE showcase_package_association
     ADD COLUMN organization_id text;
 
-    UPDATE showcase_package_association spa SET organization_id = p.owner_org FROM package p WHERE spa.package_id = p.id;
+    UPDATE showcase_package_association spa
+    SET organization_id = p.owner_org
+    FROM package p
+    WHERE spa.package_id = p.id;
     """
     conn.execute(statements)
     Session.commit()
