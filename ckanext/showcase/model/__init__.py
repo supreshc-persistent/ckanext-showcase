@@ -39,7 +39,7 @@ def setup():
             inspector = Inspector.from_engine(engine)
             columns = inspector.get_columns('showcase_package_association')
             column_names = [column['name'] for column in columns]
-            if not 'organization_id' in column_names:
+            if 'organization_id' not in column_names:
                 log.debug('ShowcasePackageAssociation table needs to be updated')
                 migrate_v2()
 
@@ -184,7 +184,7 @@ def migrate_v2():
     log.debug('Migrating ShowcasePackageAssociation table to v2.')
     conn = Session.connection()
 
-    statements =  """
+    statements = """
     ALTER TABLE showcase_package_association
     ADD COLUMN organization_id text;
 
@@ -197,22 +197,25 @@ def migrate_v2():
     Session.commit()
     log.info('ShowcasePackageAssociation table migrated to v2')
 
+
 class ShowcasePosition(ShowcaseBaseModel):
     @classmethod
     def get_showcase_postions(cls):
         showcase_positions = [i for (i, ) in Session.query(cls.showcase_id).order_by(cls.position).all()]
         return showcase_positions
 
+
 def define_showcase_position_table():
     global showcase_position_table
 
-    showcase_position_table = Table('showcase_position', metadata,
-                                 Column('showcase_id', types.UnicodeText,
-                                        ForeignKey('package.id',
-                                                   ondelete='CASCADE',
-                                                   onupdate='CASCADE'),
-                                        primary_key=True, nullable=False),
-                                 Column('position', types.Integer,
-                                        primary_key=False, nullable=False))
+    showcase_position_table = Table(
+        'showcase_position', metadata,
+        Column('showcase_id', types.UnicodeText,
+               ForeignKey('package.id',
+                          ondelete='CASCADE',
+                          onupdate='CASCADE'),
+               primary_key=True, nullable=False),
+        Column('position', types.Integer,
+               primary_key=False, nullable=False))
 
     mapper(ShowcasePosition, showcase_position_table)
