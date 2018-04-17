@@ -15,7 +15,7 @@ from ckan.controllers.package import (PackageController,
                                       _encode_params)
 
 import ckanext.showcase.logic.helpers as showcasehelpers
-from ckanext.showcase.model import ShowcasePackageAssociation,ShowcasePosition
+from ckanext.showcase.model import ShowcasePackageAssociation, ShowcasePosition
 from ckanext.showcase.plugin import DATASET_TYPE_NAME
 
 _ = tk._
@@ -634,7 +634,6 @@ class ShowcaseController(PackageController):
         showcases = showcasehelpers.get_recent_showcase_list()
         sorted_showcases = []
         position = 0
-
         for showcase_id in showcase_positions:
             showcase = next((item for item in showcases if item['id'] == showcase_id), False)
             if showcase:
