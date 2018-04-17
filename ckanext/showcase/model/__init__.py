@@ -43,11 +43,35 @@ def setup():
                 log.debug('ShowcasePackageAssociation table needs to be updated')
                 migrate_v2()
 
+        showcases_postions = []
         if not showcase_position_table.exists():
             showcase_position_table.create()
             log.debug('ShowcasePosition table create')
         else:
             log.debug('ShowcasePosition table already exists')
+            showcases_postions = ShowcasePosition.get_showcase_postions()
+
+        if len(showcases_postions) == 0:
+            log.debug('Inserting default showcase position values.')
+            conn = Session.connection()
+            statement = """
+            SELECT id from package where type='showcase';
+            """
+            showcases = conn.execute(statement).fetchall()
+            showcases = [i for (i, ) in showcases]
+            position = 0
+            for showcase_id in showcases:
+                statement = """
+                INSERT INTO showcase_position (showcase_id,position)
+                VALUES (%s,%s);
+                """
+                data = (showcase_id,position)
+                conn.execute(statement,data)
+                position = position + 1
+
+            Session.commit()
+            log.info('Default showcase position values inserted')
+
     else:
         log.debug('ShowcasePackageAssociation table creation deferred')
 
