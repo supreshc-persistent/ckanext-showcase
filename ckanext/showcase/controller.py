@@ -9,6 +9,7 @@ import ckan.lib.helpers as h
 import ckan.lib.navl.dictization_functions as dict_fns
 import ckan.logic as logic
 import ckan.plugins as p
+import ckan.lib.search as search
 from ckan.common import OrderedDict, ungettext
 from ckan.controllers.package import (PackageController,
                                       url_with_params,
@@ -629,6 +630,7 @@ class ShowcaseController(PackageController):
                         position_obj.commit()
                     else:
                         ShowcasePosition.create(showcase_id=showcase_id, position=int(v))
+                    search.rebuild(showcase_id)
 
         showcase_positions = ShowcasePosition.get_showcase_postions()
         showcases = showcasehelpers.get_recent_showcase_list()
