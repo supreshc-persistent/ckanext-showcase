@@ -631,6 +631,7 @@ class ShowcaseController(PackageController):
                     else:
                         ShowcasePosition.create(showcase_id=showcase_id, position=int(v))
                     search.rebuild(showcase_id)
+            h.flash_success(_('Showcase positions updated successfully'))
 
         showcase_positions = ShowcasePosition.get_showcase_postions()
         showcases = showcasehelpers.get_recent_showcase_list()
