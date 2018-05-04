@@ -610,10 +610,7 @@ class ShowcaseController(PackageController):
         context = {'model': model, 'session': model.Session,
                    'user': c.user or c.author, 'auth_user_obj': c.userobj}
 
-        # Check access here
-        # This is okay for now, while only sysadmins can create Showcases, but
-        # may not work if we allow other users to create Showcases, who don't
-        # have access to create dataset package types. Same for edit below.
+        # Check access here if user can create showcase then he allowed to reorder showcase positions
         try:
             check_access('ckanext_showcase_create', context)
         except NotAuthorized:
@@ -622,7 +619,9 @@ class ShowcaseController(PackageController):
         if p.toolkit.request.method == 'POST':
             data = dict(p.toolkit.request.POST)
             for k, v in data.items():
+                # Check if data key name starts with menu_item_name
                 if k.startswith('menu_item_name'):
+                    # split the key and get the showcase_id as the last element
                     showcase_id = k.split('_')[-1]
                     if ShowcasePosition.exists(showcase_id=showcase_id):
                         position_obj = ShowcasePosition.get(showcase_id=showcase_id)
@@ -630,13 +629,16 @@ class ShowcaseController(PackageController):
                         position_obj.commit()
                     else:
                         ShowcasePosition.create(showcase_id=showcase_id, position=int(v))
+                    #rebuild the search index on update/create of a showcase position
                     search.rebuild(showcase_id)
             h.flash_success(_('Showcase positions updated successfully'))
 
+        #get the current showcase position values in highest order first
         showcase_positions = ShowcasePosition.get_showcase_postions()
         showcases = showcasehelpers.get_recent_showcase_list()
         sorted_showcases = []
         position = 0
+        #iterate through the showcase_positions and assign the position value to respective showcase dict 
         for showcase_id in showcase_positions:
             showcase = next((item for item in showcases if item['id'] == showcase_id), False)
             if showcase:
