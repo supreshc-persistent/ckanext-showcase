@@ -610,7 +610,7 @@ class ShowcaseController(PackageController):
         context = {'model': model, 'session': model.Session,
                    'user': c.user or c.author, 'auth_user_obj': c.userobj}
 
-        # Check access here if user can create showcase then he allowed to reorder showcase positions
+        # Users allowed to create showcases can reorder showcase positions
         try:
             check_access('ckanext_showcase_create', context)
         except NotAuthorized:

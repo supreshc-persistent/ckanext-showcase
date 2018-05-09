@@ -284,9 +284,8 @@ class ShowcasePlugin(plugins.SingletonPlugin, lib_plugins.DefaultDatasetForm):
         filter = 'dataset_type:{0}'.format(DATASET_TYPE_NAME)
         if filter not in fq:
             search_params.update({'fq': fq + " -" + filter})
-        else:
-            if search_params.get('sort', '') is '':
-                search_params.update({'sort': 'score desc, position asc'})
+        elif search_params.get('sort', '') is '':
+            search_params.update({'sort': 'score desc, position asc'})
         return search_params
 
     # ITranslation
