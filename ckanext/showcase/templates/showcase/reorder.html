@@ -28,11 +28,7 @@
       <div class="module-content">
         <h1 class="{% block page_heading_class %}page-heading{% endblock %}">{% block page_heading %}{{ _('Reorder Showcases') }}{% endblock %}</h1>
         {% block primary_content_inner %}
-        <legend>
-        <h2>{{ _('Change the order of showcases') }}</h2>
-        </legend>
         {% snippet 'showcase/snippets/showcase_reorder_list.html', showcases=c.showcases %}
-        <b><p style="font-size: 12px;">Hint: Drag the handle to rearrange the items.</p></b>
         {% endblock %}
       </div>
     </section>
