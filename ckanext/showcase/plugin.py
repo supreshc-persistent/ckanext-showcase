@@ -19,6 +19,8 @@ import ckanext.showcase.logic.action.get
 import ckanext.showcase.logic.schema as showcase_schema
 import ckanext.showcase.logic.helpers as showcase_helpers
 from ckanext.showcase.model import setup as model_setup
+from ckanext.showcase.model import ShowcasePosition
+
 
 c = tk.c
 _ = tk._
@@ -98,8 +100,10 @@ class ShowcasePlugin(plugins.SingletonPlugin, lib_plugins.DefaultDatasetForm):
         return {
             'facet_remove_field': showcase_helpers.facet_remove_field,
             'get_site_statistics': showcase_helpers.get_site_statistics,
-            'get_recent_showcase_list': showcase_helpers.get_recent_showcase_list,
-            'get_package_showcase_list': showcase_helpers.get_package_showcase_list
+            'get_recent_showcase_list':
+                showcase_helpers.get_recent_showcase_list,
+            'get_package_showcase_list':
+                showcase_helpers.get_package_showcase_list
         }
 
     # IFacets
@@ -147,6 +151,7 @@ class ShowcasePlugin(plugins.SingletonPlugin, lib_plugins.DefaultDatasetForm):
             m.connect('ckanext_showcase_index', '/showcase', action='search',
                       highlight_actions='index search')
             m.connect('ckanext_showcase_new', '/showcase/new', action='new')
+            m.connect('ckanext_showcase_reorder', '/showcase/reorder', action='reorder')
             m.connect('ckanext_showcase_delete', '/showcase/delete/{id}',
                       action='delete')
             m.connect('ckanext_showcase_read', '/showcase/{id}', action='read',
@@ -167,6 +172,27 @@ class ShowcasePlugin(plugins.SingletonPlugin, lib_plugins.DefaultDatasetForm):
         map.redirect('/showcases/{url:.*}', '/showcase/{url}')
         return map
 
+    def after_create(self, context, pkg_dict):
+        if pkg_dict.get('type') == 'showcase':
+            showcase_positions = ShowcasePosition.get_showcase_postions()
+            if len(showcase_positions) > 0 :
+                last_position_obj = ShowcasePosition.get(showcase_id=showcase_positions[-1])
+                new_position_value = last_position_obj.position + 1
+            else:
+                new_position_value = 0
+            ShowcasePosition.create(showcase_id=pkg_dict['id'], position=new_position_value)
+
+    def before_index(self, pkg_dict):
+        if pkg_dict['type'] == 'showcase':
+            position_obj = ShowcasePosition.get(showcase_id=pkg_dict['id'])
+            pkg_dict['position'] = position_obj.position
+        return pkg_dict
+
+    def before_view(self, pkg_dict):
+        if pkg_dict['type'] == 'showcase':
+            position_obj = ShowcasePosition.get(showcase_id=pkg_dict['id'])
+            pkg_dict['position'] = position_obj.position
+        return pkg_dict
     # IActions
 
     def get_actions(self):
@@ -258,6 +284,8 @@ class ShowcasePlugin(plugins.SingletonPlugin, lib_plugins.DefaultDatasetForm):
         filter = 'dataset_type:{0}'.format(DATASET_TYPE_NAME)
         if filter not in fq:
             search_params.update({'fq': fq + " -" + filter})
+        elif search_params.get('sort', '') is '':
+            search_params.update({'sort': 'score desc, position asc'})
         return search_params
 
     # ITranslation
