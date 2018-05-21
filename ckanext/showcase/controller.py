@@ -632,13 +632,16 @@ class ShowcaseController(PackageController):
                     #rebuild the search index on update/create of a showcase position
                     search.rebuild(showcase_id)
             h.flash_success(_('Showcase positions updated successfully'))
+            return redirect(h.url_for(
+                controller='ckanext.showcase.controller:ShowcaseController',
+                action='index'))
 
         #get the current showcase position values in highest order first
         showcase_positions = ShowcasePosition.get_showcase_postions()
         showcases = showcasehelpers.get_recent_showcase_list()
         sorted_showcases = []
         position = 0
-        #iterate through the showcase_positions and assign the position value to respective showcase dict 
+        #iterate through the showcase_positions and assign the position value to respective showcase dict
         for showcase_id in showcase_positions:
             showcase = next((item for item in showcases if item['id'] == showcase_id), False)
             if showcase:

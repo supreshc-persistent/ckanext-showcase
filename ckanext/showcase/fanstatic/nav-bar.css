@@ -39,3 +39,15 @@ span.grippy.cursor-grabbing {
   cursor: -moz-grabbing;
   cursor: -webkit-grabbing;
 }
+
+h3.grippy {
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+h3.grippy.cursor-grabbing {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+}

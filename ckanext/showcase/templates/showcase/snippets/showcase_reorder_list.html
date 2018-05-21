@@ -3,7 +3,7 @@
     {% for showcase in showcases %}
       <li class="portal-nav-menu-admin__item">
         <input type="hidden" name="menu_item_name_{{ showcase.id }}" value="{{ showcase.position }}" />
-        <h3>{{ showcase.title|truncate(80) }}</h3>
+        <h3 class="grippy">{{ showcase.title|truncate(80) }}</h3>
         <span class="grippy"></span>
       </li>
     {% endfor %}
